@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'lib.dart';
 
 void main() {
@@ -70,6 +69,7 @@ class _MyAppState extends State<MyApp> {
             });
           },
           backgroundColor: colorDefaultLight,
+          indicatorColor: colorDefault,
           selectedIndex: currentPageIndex,
           destinations: const [
             NavigationDestination(

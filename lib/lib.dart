@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 // Some colors used frequently
@@ -54,12 +53,16 @@ class _TutorialWidgetState extends State<TutorialWidget> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorDefaultLight,
-        title: Center(child: CText(widget.title)),
+        title: Hero(
+          tag: widget.title,
+          child:
+              Material(color: Colors.transparent, child: CText(widget.title)),
+        ),
       ),
       body: Container(
         constraints:
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-        decoration: BoxDecoration(color: colorBackground),
+        decoration: const BoxDecoration(color: colorBackground),
         child: ListView(
           scrollDirection: Axis.vertical,
           children: [
@@ -99,33 +102,38 @@ class TutorialsWidget extends StatefulWidget {
 class _TutorialsWidgetState extends State<TutorialsWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        itemCount: widget.tutorials.length,
-        itemBuilder: (context, index) {
-          MapEntry<String, String> element =
-              widget.tutorials.entries.elementAt(index);
-          return TextButton(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: CText(
-                element.key,
+    return ListView.builder(
+      itemCount: widget.tutorials.length,
+      itemBuilder: (context, index) {
+        MapEntry<String, String> element =
+            widget.tutorials.entries.elementAt(index);
+        return TextButton(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Material(
+              color: Colors.transparent,
+              child: Hero(
+                tag: element.key,
+                child: Material(
+                  color: Colors.transparent,
+                  child: CText(element.key),
+                ),
               ),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => TutorialWidget(
-                    element.key,
-                    element.value,
-                  ),
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TutorialWidget(
+                  element.key,
+                  element.value,
                 ),
-              );
-            },
-          );
-        },
-      ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
