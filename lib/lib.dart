@@ -28,6 +28,18 @@ const TextStyle textStyleDefault = TextStyle(
   height: 1.2,
 );
 
+const TextStyle textStyleHeading = TextStyle(
+  color: colorText,
+  fontSize: 30,
+  height: 1.2,
+);
+
+const TextStyle textStyleSubHeading = TextStyle(
+  color: colorText,
+  fontSize: 26,
+  height: 1.2,
+);
+
 // some default paths
 const String dirImages = "data/images";
 const String dirTutorials = "data/tutorials";
@@ -55,30 +67,30 @@ class _TutorialWidgetState extends State<TutorialWidget> {
         backgroundColor: colorDefaultLight,
         title: Hero(
           tag: widget.title,
-          child:
-              Material(color: Colors.transparent, child: CText(widget.title)),
+          child: Material(
+              color: Colors.transparent,
+              child: CText(
+                widget.title,
+                style: textStyleHeading,
+              )),
         ),
       ),
       body: Container(
         constraints:
             BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
         decoration: const BoxDecoration(color: colorBackground),
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            MarkdownBody(
-              styleSheet: MarkdownStyleSheet(
-                p: textStyleDefault,
-                h1: textStyleDefault,
-                listBullet: textStyleDefault,
-                // horizontalRuleDecoration: BoxDecoration(color: colorText),
-              ),
-              imageDirectory: "data/images/",
-              selectable: true,
-              syntaxHighlighter: null,
-              data: widget.tutorialText,
-            )
-          ],
+        child: Markdown(
+          styleSheet: MarkdownStyleSheet(
+            p: textStyleDefault,
+            h1: textStyleHeading,
+            h2: textStyleSubHeading,
+            listBullet: textStyleDefault,
+            // horizontalRuleDecoration: BoxDecoration(color: colorText),
+          ),
+          imageDirectory: "data/images/",
+          selectable: true,
+          syntaxHighlighter: null,
+          data: widget.tutorialText,
         ),
       ),
     );
@@ -103,6 +115,7 @@ class _TutorialsWidgetState extends State<TutorialsWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      itemExtent: 50,
       itemCount: widget.tutorials.length,
       itemBuilder: (context, index) {
         MapEntry<String, String> element =
@@ -110,14 +123,11 @@ class _TutorialsWidgetState extends State<TutorialsWidget> {
         return TextButton(
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Material(
-              color: Colors.transparent,
-              child: Hero(
-                tag: element.key,
-                child: Material(
-                  color: Colors.transparent,
-                  child: CText(element.key),
-                ),
+            child: Hero(
+              tag: element.key,
+              child: Material(
+                color: Colors.transparent,
+                child: CText(element.key),
               ),
             ),
           ),

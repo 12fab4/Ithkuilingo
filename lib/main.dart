@@ -27,11 +27,32 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Ithkuilingo",
+      theme: ThemeData(
+        colorScheme: const ColorScheme(
+          onSurface: colorText,
+          brightness: Brightness.light,
+          primary: colorDefault,
+          onPrimary: colorText,
+          secondary: colorDefaultLight,
+          onSecondary: colorText,
+          error: colorError,
+          onError: colorText,
+          background: colorBackground,
+          onBackground: colorText,
+          surface: colorDefaultLight,
+        ),
+        useMaterial3: true,
+      ),
       home: Scaffold(
         backgroundColor: colorBackground,
         appBar: AppBar(
           backgroundColor: colorDefaultLight,
-          title: const Center(child: CText("Ithkuil is fun!")),
+          title: const Center(
+              child: CText(
+            "Ithkuil is fun!",
+            style: textStyleHeading,
+          )),
         ),
         body: Container(
           decoration: const BoxDecoration(
