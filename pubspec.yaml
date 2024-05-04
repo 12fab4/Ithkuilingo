@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_markdown: ^0.7.1
-
+  virtual_keyboard_multi_language: ^1.0.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

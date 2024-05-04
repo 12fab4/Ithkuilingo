@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:ithkuilingo/custom_keyboard.dart';
 import 'lib.dart';
 
 void main() {
@@ -17,6 +18,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late LinkedHashMap<String, String> tutorials;
   int currentPageIndex = 0;
+  CKeyboard keyboard = CKeyboard();
+  bool keyboardVisible = false;
 
   @override
   void initState() {
@@ -54,34 +57,57 @@ class _MyAppState extends State<MyApp> {
             style: textStyleHeading,
           )),
         ),
-        body: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              left: BorderSide(
-                width: 15,
-                color: colorBackground,
+        body: Stack(
+          children: [
+            /// The main UI
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    width: 15,
+                    color: colorBackground,
+                  ),
+                  right: BorderSide(
+                    width: 15,
+                    color: colorBackground,
+                  ),
+                ),
               ),
-              right: BorderSide(
-                width: 15,
-                color: colorBackground,
-              ),
-            ),
-          ),
-          child: [
-            /// The Home Page
-            const Center(
-              child: CText("Homepage"),
+              child: [
+                /// The Home Page
+                Column(
+                  children: [
+                    CText("Homepage"),
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            keyboardVisible = !keyboardVisible;
+                          });
+                        },
+                        child: CText("Press Me!")),
+                  ],
+                ),
+
+                /// The Tutorials Page
+                TutorialsWidget(tutorials),
+                const Center(
+                  child: CText("Progress"),
+                ),
+                const Center(
+                  child: CText("Reading"),
+                ),
+              ][currentPageIndex],
             ),
 
-            /// The Tutorials Page
-            TutorialsWidget(tutorials),
-            const Center(
-              child: CText("Progress"),
-            ),
-            const Center(
-              child: CText("Reading"),
-            ),
-          ][currentPageIndex],
+            /// The Keyboard
+            Container(
+              alignment: Alignment.bottomLeft,
+              child: Visibility(
+                visible: keyboardVisible,
+                child: CKeyboard(),
+              ),
+            )
+          ],
         ),
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (index) {
