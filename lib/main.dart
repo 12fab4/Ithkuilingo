@@ -20,14 +20,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final TextEditingController _controller = TextEditingController();
   CTextField newTextField() {
     return CTextField(
-      onFocussed: (controller) {
-        widget.keyboard.setController(controller);
-        print(widget.keyboard.controller);
+      onFocussed: () {
         setState(() {
           widget.keyboardVisible = true;
         });
+        return _controller;
       },
       onUnfocussed: () {
         setState(() {
@@ -35,6 +35,12 @@ class _MyAppState extends State<MyApp> {
         });
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -122,7 +128,9 @@ class _MyAppState extends State<MyApp> {
               alignment: Alignment.bottomLeft,
               child: Visibility(
                 visible: widget.keyboardVisible,
-                child: CKeyboard(),
+                child: CKeyboard(
+                  controller: _controller,
+                ),
               ),
             )
           ],

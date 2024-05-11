@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 // Some colors used frequently
@@ -165,33 +166,33 @@ LinkedHashMap<String, String> readDir(String path) {
 }
 
 class CTextField extends StatefulWidget {
-  final void Function(TextEditingController)? onFocussed;
+  final TextEditingController Function()? onFocussed;
   final void Function()? onUnfocussed;
-  final controller = TextEditingController(text: "ABC");
 
   /// A custom Inputfield. OnFocussed is callend when starting to enter text (with the textController as the only arg) and onUnFocussed if the Widget loses Focus
-  CTextField({super.key, this.onFocussed, this.onUnfocussed});
+  const CTextField({super.key, this.onFocussed, this.onUnfocussed});
 
   @override
   State<CTextField> createState() => _CTextFieldState();
 }
 
 class _CTextFieldState extends State<CTextField> {
-
+  TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return FocusScope(
       child: Focus(
         onFocusChange: (focused) {
           if (focused) {
-            widget.onFocussed?.call(widget.controller);
+            controller = widget.onFocussed?.call();
           } else {
             widget.onUnfocussed?.call();
+            controller = null;
           }
         },
         child: TextField(
-          controller: widget.controller,
-          // readOnly: true,
+          controller: controller,
+          readOnly: true,
           showCursor: true,
         ),
       ),

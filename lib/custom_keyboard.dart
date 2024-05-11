@@ -5,9 +5,8 @@ import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.
 import 'package:flutter/material.dart';
 
 class CKeyboard extends StatefulWidget {
-  String text = "";
   TextEditingController? controller;
-  CKeyboard({super.key});
+  CKeyboard({super.key, this.controller});
 
   @override
   State<CKeyboard> createState() => _CKeyboardState();
@@ -18,10 +17,10 @@ class CKeyboard extends StatefulWidget {
 }
 
 class _CKeyboardState extends State<CKeyboard> {
+  TextEditingController? _controller;
+
   @override
   Widget build(BuildContext context) {
-    print("status update:");
-    print(widget.controller);
     return Container(
       child: VirtualKeyboard(
         type: VirtualKeyboardType.Alphanumeric,
@@ -35,18 +34,19 @@ class _CKeyboardState extends State<CKeyboard> {
 
   _onKeyPress(VirtualKeyboardKey key) {
     if (key.keyType == VirtualKeyboardKeyType.String) {
-      widget.controller?.text += key.text!;
+      setState(() {
+        widget.controller?.text += key.text!;
+      });
     }
     if (key.action == VirtualKeyboardKeyAction.Backspace) {
       if (widget.controller != null) {
-        widget.controller!.text = widget.controller!.text
-            .substring(0, max(widget.controller!.text.length - 1, 0));
+        setState(() {
+          widget.controller!.text = widget.controller!.text
+              .substring(0, max(widget.controller!.text.length - 1, 0));
+        });
       }
     }
-    if (key.action == VirtualKeyboardKeyAction.Return) {
-      print(widget.controller?.text);
-      print(widget.controller);
-    }
+    if (key.action == VirtualKeyboardKeyAction.Return) {}
   }
 }
 
