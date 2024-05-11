@@ -62,13 +62,58 @@ class CKeyboardLayout extends VirtualKeyboardDefaultLayoutKeys {
     return [
       [
         "a",
+        "ä",
         "b",
         "c",
-        "ĉ",
+        "č",
+        "ç",
+        "d",
+        "d͕"
       ],
       [
-        VirtualKeyboardKeyAction.Backspace,
+        "e",
+        "ë",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k"
+      ],
+      [
+        "l",
+        "l͕",
+        "m",
+        "n",
+        "ň",
+        "o",
+        "ö",
+        "p"
+      ],
+      [
+        "r",
+        "ř",
+        "s",
+        "š",
+        "t",
+        "ţ",
+        "u",
+        "ü"
+      ],
+      [
+        "v",
+        "w",
+        "x",
+        "y",
+        "z",
+        "ž",
+        "ẓ",
+        "'"
+      ],
+      [
         VirtualKeyboardKeyAction.Return,
+        " ",
+        VirtualKeyboardKeyAction.Backspace,
       ]
     ];
   }
