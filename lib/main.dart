@@ -5,25 +5,41 @@ import 'package:ithkuilingo/custom_keyboard.dart';
 import 'lib.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  late LinkedHashMap<String, String> tutorials;
+  int currentPageIndex = 0;
+  CKeyboard keyboard = CKeyboard();
+  bool keyboardVisible = false;
+  MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  late LinkedHashMap<String, String> tutorials;
-  int currentPageIndex = 0;
-  CKeyboard keyboard = CKeyboard();
-  bool keyboardVisible = false;
+  CTextField newTextField() {
+    return CTextField(
+      onFocussed: (controller) {
+        widget.keyboard.setController(controller);
+        print(widget.keyboard.controller);
+        setState(() {
+          widget.keyboardVisible = true;
+        });
+      },
+      onUnfocussed: () {
+        setState(() {
+          // widget.keyboardVisible = false;
+        });
+      },
+    );
+  }
 
   @override
   void initState() {
-    tutorials = readDir(dirTutorials);
+    widget.tutorials = readDir(dirTutorials);
     super.initState();
   }
 
@@ -79,31 +95,33 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     CText("Homepage"),
                     TextButton(
-                        onPressed: () {
-                          setState(() {
-                            keyboardVisible = !keyboardVisible;
-                          });
-                        },
-                        child: CText("Press Me!")),
+                      onPressed: () {
+                        setState(() {
+                          widget.keyboardVisible = !widget.keyboardVisible;
+                        });
+                      },
+                      child: CText("Press Me!"),
+                    ),
+                    newTextField(),
                   ],
                 ),
 
                 /// The Tutorials Page
-                TutorialsWidget(tutorials),
+                TutorialsWidget(widget.tutorials),
                 const Center(
                   child: CText("Progress"),
                 ),
                 const Center(
                   child: CText("Reading"),
                 ),
-              ][currentPageIndex],
+              ][widget.currentPageIndex],
             ),
 
             /// The Keyboard
             Container(
               alignment: Alignment.bottomLeft,
               child: Visibility(
-                visible: keyboardVisible,
+                visible: widget.keyboardVisible,
                 child: CKeyboard(),
               ),
             )
@@ -112,12 +130,12 @@ class _MyAppState extends State<MyApp> {
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (index) {
             setState(() {
-              currentPageIndex = index;
+              widget.currentPageIndex = index;
             });
           },
           backgroundColor: colorDefaultLight,
           indicatorColor: colorDefault,
-          selectedIndex: currentPageIndex,
+          selectedIndex: widget.currentPageIndex,
           destinations: const [
             NavigationDestination(
               icon: Icon(

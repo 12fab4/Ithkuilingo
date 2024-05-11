@@ -6,15 +6,22 @@ import 'package:flutter/material.dart';
 
 class CKeyboard extends StatefulWidget {
   String text = "";
+  TextEditingController? controller;
   CKeyboard({super.key});
 
   @override
   State<CKeyboard> createState() => _CKeyboardState();
+
+  void setController(TextEditingController newController) {
+    controller = newController;
+  }
 }
 
 class _CKeyboardState extends State<CKeyboard> {
   @override
   Widget build(BuildContext context) {
+    print("status update:");
+    print(widget.controller);
     return Container(
       child: VirtualKeyboard(
         type: VirtualKeyboardType.Alphanumeric,
@@ -28,13 +35,17 @@ class _CKeyboardState extends State<CKeyboard> {
 
   _onKeyPress(VirtualKeyboardKey key) {
     if (key.keyType == VirtualKeyboardKeyType.String) {
-      widget.text += key.text!;
+      widget.controller?.text += key.text!;
     }
     if (key.action == VirtualKeyboardKeyAction.Backspace) {
-      widget.text = widget.text.substring(0, max(widget.text.length - 1, 0));
+      if (widget.controller != null) {
+        widget.controller!.text = widget.controller!.text
+            .substring(0, max(widget.controller!.text.length - 1, 0));
+      }
     }
     if (key.action == VirtualKeyboardKeyAction.Return) {
-      print(widget.text);
+      print(widget.controller?.text);
+      print(widget.controller);
     }
   }
 }
