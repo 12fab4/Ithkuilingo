@@ -5,29 +5,28 @@ import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.
 import 'package:flutter/material.dart';
 
 class CKeyboard extends StatefulWidget {
-  TextEditingController? controller;
-  CKeyboard({super.key, this.controller});
+  final TextEditingController? controller;
+  const CKeyboard({super.key, this.controller});
 
   @override
   State<CKeyboard> createState() => _CKeyboardState();
-
-  void setController(TextEditingController newController) {
-    controller = newController;
-  }
 }
 
 class _CKeyboardState extends State<CKeyboard> {
-  TextEditingController? _controller;
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: VirtualKeyboard(
-        type: VirtualKeyboardType.Alphanumeric,
-        textColor: colorText,
-        customLayoutKeys: CKeyboardLayout(),
-        fontSize: 20,
-        onKeyPress: _onKeyPress,
+      child: Column(
+        children: [
+          CText(widget.controller?.text ?? ""),
+          VirtualKeyboard(
+            type: VirtualKeyboardType.Alphanumeric,
+            textColor: colorText,
+            customLayoutKeys: CKeyboardLayout(),
+            fontSize: 20,
+            onKeyPress: _onKeyPress,
+          ),
+        ],
       ),
     );
   }
@@ -60,59 +59,14 @@ class CKeyboardLayout extends VirtualKeyboardDefaultLayoutKeys {
   List<List> getLanguage(int index) {
     // Here is the Keyboard Matrix
     return [
-      [
-        "a",
-        "ä",
-        "b",
-        "c",
-        "č",
-        "ç",
-        "d",
-        "d͕"
-      ],
-      [
-        "e",
-        "ë",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k"
-      ],
-      [
-        "l",
-        "l͕",
-        "m",
-        "n",
-        "ň",
-        "o",
-        "ö",
-        "p"
-      ],
-      [
-        "r",
-        "ř",
-        "s",
-        "š",
-        "t",
-        "ţ",
-        "u",
-        "ü"
-      ],
-      [
-        "v",
-        "w",
-        "x",
-        "y",
-        "z",
-        "ž",
-        "ẓ",
-        "'"
-      ],
+      ["a", "ä", "b", "c", "č", "ç", "d", "d͕"],
+      ["e", "ë", "f", "g", "h", "i", "j", "k"],
+      ["l", "l͕", "m", "n", "ň", "o", "ö", "p"],
+      ["r", "ř", "s", "š", "t", "ţ", "u", "ü"],
+      ["v", "w", "x", "y", "z", "ž", "ẓ", "'"],
       [
         VirtualKeyboardKeyAction.Return,
-        " ",
+        VirtualKeyboardKeyAction.Space,
         VirtualKeyboardKeyAction.Backspace,
       ]
     ];

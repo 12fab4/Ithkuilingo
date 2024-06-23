@@ -178,6 +178,9 @@ class CTextField extends StatefulWidget {
 
 class _CTextFieldState extends State<CTextField> {
   TextEditingController? controller;
+
+  onTextInput() {}
+
   @override
   Widget build(BuildContext context) {
     return FocusScope(
@@ -190,10 +193,13 @@ class _CTextFieldState extends State<CTextField> {
             controller = null;
           }
         },
-        child: TextField(
-          controller: controller,
-          readOnly: true,
-          showCursor: true,
+        child: ValueListenableBuilder(
+          valueListenable: controller ?? TextEditingController(text: ""),
+          builder: (context, value, __) => TextField(
+            controller: controller,
+            readOnly: true,
+            showCursor: true,
+          ),
         ),
       ),
     );
