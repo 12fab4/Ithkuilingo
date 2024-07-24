@@ -30,13 +30,11 @@ class _ExplanationWidgetState extends State<ExplanationWidget> {
       appBar: AppBar(
         // containing the matching hero of the [ReferencePage] Button
         title: Hero(
-          tag:
-              widget.title, // ensures the button label and the title are linked
+          tag: widget.title, // ensures the button label and the title are linked
           // this wrapper ensures the textstyle of the label is kept during the animation
           child: Material(
             color: Colors.transparent,
-            child: Text(widget
-                .title), // the visible content of the AppBar is a label with the title of the Page
+            child: Text(widget.title), // the visible content of the AppBar is a label with the title of the Page
           ),
         ),
       ),
@@ -48,8 +46,7 @@ class _ExplanationWidgetState extends State<ExplanationWidget> {
                 .width), // this is necessary as Markdown widgets are Scrollable and they cant have infinite space along their nonscrolling axis
         // this widget actually renders the Markdowntext beautifully
         child: Markdown(
-          imageDirectory:
-              "data/images/", // an image like this ![cat.png] is located at ithkuilingo/data/images/cat.png
+          imageDirectory: "data/images/", // an image like this ![cat.png] is located at ithkuilingo/data/images/cat.png
           data: widget.tutorialText,
         ),
       ),

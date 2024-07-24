@@ -32,9 +32,6 @@ class _MyAppState extends State<MyApp> {
   /// the controller the custom Keyboard uses to communicate with [CTextField]s
   final TextEditingController _controller = TextEditingController();
 
-  /// the Keyboard to be used
-  CKeyboard keyboard = const CKeyboard();
-
   /// a function to generate a CTextField that integrates with the keyboard
   CTextField newTextField() {
     // it provides a normal CTextField
@@ -45,6 +42,12 @@ class _MyAppState extends State<MyApp> {
           keyboardVisible = true; // that displays the keyboard
         });
         return _controller; // and provides the controller of the keyboard
+      },
+      // and hides the keyboard if OK is pressed
+      onSubmitted: (text) {
+        setState(() {
+          keyboardVisible = false;
+        });
       },
     );
   }
@@ -60,8 +63,7 @@ class _MyAppState extends State<MyApp> {
   /// this is called when the object enters the object-tree
   @override
   void initState() {
-    tutorials = readDir(
-        dirTutorials); // and we use it to read saved data required for propper display
+    tutorials = readDir(dirTutorials); // and we use it to read saved data required for propper display
     super.initState();
   }
 
@@ -202,20 +204,17 @@ class _MyAppState extends State<MyApp> {
                 constraints: const BoxConstraints(
                     maxHeight:
                         80), // the footer bar has a default height of 80 and if no constraints are specified the container fills the screen
-                color:
-                    colorBackground, // the footer bar is hidden behind a box of backgroundcolor
+                color: colorBackground, // the footer bar is hidden behind a box of backgroundcolor
               ),
             ),
           ),
           // this is the actual keyboard to be shown above the inner app and the footercover
           Container(
-            alignment:
-                Alignment.bottomCenter, // the keyboard is also at the bottom
+            alignment: Alignment.bottomCenter, // the keyboard is also at the bottom
             child: Visibility(
               visible: keyboardVisible, // and only shown if required
               child: CKeyboard(
-                controller:
-                    _controller, // this is the controller for the keyboard
+                controller: _controller, // this is the controller for the keyboard
               ),
             ),
           )

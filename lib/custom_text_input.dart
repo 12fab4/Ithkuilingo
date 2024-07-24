@@ -8,8 +8,11 @@ class CTextField extends StatefulWidget {
   /// and it should return a [TextEditingController] used to modify the TextField
   final TextEditingController Function()? onFocused;
 
+  /// this will be called when the user presses enter on the widget
+  final void Function(String)? onSubmitted;
+
   /// A custom Inputfield. OnFocussed is callend when starting to enter text (with the textController as the only arg) and onUnFocussed if the Widget loses Focus
-  const CTextField({super.key, this.onFocused});
+  const CTextField({super.key, this.onFocused, this.onSubmitted});
 
   @override
   State<CTextField> createState() => _CTextFieldState();
@@ -18,7 +21,20 @@ class CTextField extends StatefulWidget {
 class _CTextFieldState extends State<CTextField> {
   TextEditingController? controller;
 
-  onTextInput() {}
+  void onTextInput() {
+    // this function is called every time the text changes
+    if (controller!.text.contains("OK")) {
+      // "OK" is the sequence the Enter Key uses
+      setState(() {
+        controller?.text.replaceFirst("OK", ""); // remove the OK the enter key added
+      });
+      // call additionally provided code
+      if (controller != null) {
+        widget.onSubmitted?.call(controller!.text); // and pass the text to the provided function
+      }
+      controller!.removeListener(onTextInput);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +50,14 @@ class _CTextFieldState extends State<CTextField> {
               controller = widget.onFocused
                   ?.call(); // allows the textField to be edited via eg. the CKeyboard and runs additional code if provided
             });
+            // start listening to changes to the text
+            controller?.addListener(onTextInput);
           }
         },
         // the underlying TextField
         child: TextField(
           controller: controller,
-          readOnly:
-              true, // so no external keyboards can be used and on mobile OSes no OSK is shown
+          readOnly: true, // so no external keyboards can be used and on mobile OSes no OSK is shown
         ),
       ),
     );
