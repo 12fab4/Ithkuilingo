@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 // Some colors used frequently
@@ -187,19 +186,20 @@ class _CTextFieldState extends State<CTextField> {
       child: Focus(
         onFocusChange: (focused) {
           if (focused) {
-            controller = widget.onFocussed?.call();
+            setState(() {
+              controller = widget.onFocussed?.call();
+            });
           } else {
             widget.onUnfocussed?.call();
-            controller = null;
+            setState(() {
+              // controller = null;
+            });
           }
         },
-        child: ValueListenableBuilder(
-          valueListenable: controller ?? TextEditingController(text: ""),
-          builder: (context, value, __) => TextField(
-            controller: controller,
-            readOnly: true,
-            showCursor: true,
-          ),
+        child: TextField(
+          controller: controller,
+          readOnly: true,
+          showCursor: true,
         ),
       ),
     );

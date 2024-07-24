@@ -16,17 +16,14 @@ class _CKeyboardState extends State<CKeyboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          CText(widget.controller?.text ?? ""),
-          VirtualKeyboard(
-            type: VirtualKeyboardType.Alphanumeric,
-            textColor: colorText,
-            customLayoutKeys: CKeyboardLayout(),
-            fontSize: 20,
-            onKeyPress: _onKeyPress,
-          ),
-        ],
+      alignment: Alignment.bottomCenter,
+      child: VirtualKeyboard(
+        type: VirtualKeyboardType.Alphanumeric,
+        textColor: colorText,
+        customLayoutKeys: CKeyboardLayout(),
+        fontSize: 20,
+        // onKeyPress: _onKeyPress,
+        textController: widget.controller,
       ),
     );
   }
@@ -38,14 +35,20 @@ class _CKeyboardState extends State<CKeyboard> {
       });
     }
     if (key.action == VirtualKeyboardKeyAction.Backspace) {
-      if (widget.controller != null) {
-        setState(() {
-          widget.controller!.text = widget.controller!.text
-              .substring(0, max(widget.controller!.text.length - 1, 0));
-        });
-      }
+      setState(() {
+        widget.controller!.text = widget.controller!.text
+            .substring(0, max(widget.controller!.text.length - 1, 0));
+      });
     }
-    if (key.action == VirtualKeyboardKeyAction.Return) {}
+    if (key.action == VirtualKeyboardKeyAction.Space) {
+      setState(() {
+        widget.controller?.text += " ";
+      });
+    }
+
+    if (key.action == VirtualKeyboardKeyAction.Return) {
+      // widget.onEnter?.call();
+    }
   }
 }
 
