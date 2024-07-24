@@ -2,7 +2,9 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:ithkuilingo/custom_keyboard.dart';
-import 'lib.dart';
+import 'package:ithkuilingo/custom_text_input.dart';
+import 'package:ithkuilingo/lib.dart';
+import 'package:ithkuilingo/reference_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -112,8 +114,8 @@ class _MyAppState extends State<MyApp> {
                   ],
                 ),
 
-                /// The Tutorials Page
-                TutorialsWidget(tutorials),
+                /// The Reference Page
+                ReferencePageWidget(tutorials),
                 const Center(
                   child: CText("Progress"),
                 ),

@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 
 // Some colors used frequently
 const Color colorBackground = Color.fromARGB(255, 15, 0, 26);
@@ -44,108 +43,9 @@ const TextStyle textStyleSubHeading = TextStyle(
 const String dirImages = "data/images";
 const String dirTutorials = "data/tutorials";
 
-/// Creates a Widget, that displays a markdown file with title in the AppBar
-class TutorialWidget extends StatefulWidget {
-  final String tutorialText;
-  final String title;
-
-  const TutorialWidget(
-    this.title,
-    this.tutorialText, {
-    super.key,
-  });
-
-  @override
-  State<TutorialWidget> createState() => _TutorialWidgetState();
-}
-
-class _TutorialWidgetState extends State<TutorialWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: colorDefaultLight,
-        title: Hero(
-          tag: widget.title,
-          child: Material(
-              color: Colors.transparent,
-              child: CText(
-                widget.title,
-                style: textStyleHeading,
-              )),
-        ),
-      ),
-      body: Container(
-        constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-        decoration: const BoxDecoration(color: colorBackground),
-        child: Markdown(
-          styleSheet: MarkdownStyleSheet(
-            p: textStyleDefault,
-            h1: textStyleHeading,
-            h2: textStyleSubHeading,
-            listBullet: textStyleDefault,
-            // horizontalRuleDecoration: BoxDecoration(color: colorText),
-          ),
-          imageDirectory: "data/images/",
-          selectable: true,
-          syntaxHighlighter: null,
-          data: widget.tutorialText,
-        ),
-      ),
-    );
-  }
-}
-
 class CText extends Text {
   const CText(super.data,
       {super.key, super.style = textStyleDefault, super.textAlign});
-}
-
-class TutorialsWidget extends StatefulWidget {
-  const TutorialsWidget(this.tutorials, {super.key});
-
-  final LinkedHashMap<String, String> tutorials;
-
-  @override
-  State<TutorialsWidget> createState() => _TutorialsWidgetState();
-}
-
-class _TutorialsWidgetState extends State<TutorialsWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemExtent: 50,
-      itemCount: widget.tutorials.length,
-      itemBuilder: (context, index) {
-        MapEntry<String, String> element =
-            widget.tutorials.entries.elementAt(index);
-        return TextButton(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Hero(
-              tag: element.key,
-              child: Material(
-                color: Colors.transparent,
-                child: CText(element.key),
-              ),
-            ),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => TutorialWidget(
-                  element.key,
-                  element.value,
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
 }
 
 /// Reads a directory and returns Title (the first line) and content in a map (Files are alphgabetically ordered)
@@ -162,46 +62,4 @@ LinkedHashMap<String, String> readDir(String path) {
     }
   }
   return map;
-}
-
-class CTextField extends StatefulWidget {
-  final TextEditingController Function()? onFocussed;
-  final void Function()? onUnfocussed;
-
-  /// A custom Inputfield. OnFocussed is callend when starting to enter text (with the textController as the only arg) and onUnFocussed if the Widget loses Focus
-  const CTextField({super.key, this.onFocussed, this.onUnfocussed});
-
-  @override
-  State<CTextField> createState() => _CTextFieldState();
-}
-
-class _CTextFieldState extends State<CTextField> {
-  TextEditingController? controller;
-
-  onTextInput() {}
-
-  @override
-  Widget build(BuildContext context) {
-    return FocusScope(
-      child: Focus(
-        onFocusChange: (focused) {
-          if (focused) {
-            setState(() {
-              controller = widget.onFocussed?.call();
-            });
-          } else {
-            widget.onUnfocussed?.call();
-            setState(() {
-              // controller = null;
-            });
-          }
-        },
-        child: TextField(
-          controller: controller,
-          readOnly: true,
-          showCursor: true,
-        ),
-      ),
-    );
-  }
 }
