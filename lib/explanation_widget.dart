@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'lib.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-
-/// Creates a Widget, that displays a markdown file with title in the AppBar
+/// a Widget intendet to be pushed via Navigator.push() that displays a Markdownfile and has a title in the headerbar
 class ExplanationWidget extends StatefulWidget {
+  /// Creates a Widget, that displays a markdown file with title in the AppBar
+
+  /// the markdown text to display
   final String tutorialText;
+
+  /// the title to display in the AppBar
   final String title;
 
-  const ExplanationWidget(
-    this.title,
-    this.tutorialText, {
+  const ExplanationWidget({
+    required this.title,
+    required this.tutorialText,
     super.key,
   });
 
@@ -21,34 +24,32 @@ class ExplanationWidget extends StatefulWidget {
 class _ExplanationWidgetState extends State<ExplanationWidget> {
   @override
   Widget build(BuildContext context) {
+    // the Page contains a normal scaffold app
     return Scaffold(
+      // with a custom AppBar
       appBar: AppBar(
-        backgroundColor: colorDefaultLight,
+        // containing the matching hero of the [ReferencePage] Button
         title: Hero(
-          tag: widget.title,
+          tag:
+              widget.title, // ensures the button label and the title are linked
+          // this wrapper ensures the textstyle of the label is kept during the animation
           child: Material(
-              color: Colors.transparent,
-              child: CText(
-                widget.title,
-                style: textStyleHeading,
-              )),
+            color: Colors.transparent,
+            child: Text(widget
+                .title), // the visible content of the AppBar is a label with the title of the Page
+          ),
         ),
       ),
+      // the Body of the Page
       body: Container(
-        constraints:
-            BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-        decoration: const BoxDecoration(color: colorBackground),
+        constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context)
+                .size
+                .width), // this is necessary as Markdown widgets are Scrollable and they cant have infinite space along their nonscrolling axis
+        // this widget actually renders the Markdowntext beautifully
         child: Markdown(
-          styleSheet: MarkdownStyleSheet(
-            p: textStyleDefault,
-            h1: textStyleHeading,
-            h2: textStyleSubHeading,
-            listBullet: textStyleDefault,
-            // horizontalRuleDecoration: BoxDecoration(color: colorText),
-          ),
-          imageDirectory: "data/images/",
-          selectable: true,
-          syntaxHighlighter: null,
+          imageDirectory:
+              "data/images/", // an image like this ![cat.png] is located at ithkuilingo/data/images/cat.png
           data: widget.tutorialText,
         ),
       ),
